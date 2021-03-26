@@ -1,0 +1,124 @@
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>基于body-pix的图像分割生成</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery.min.js"></script>
+    <!-- Load TensorFlow.js -->
+    <script src="js/tf.min.js"></script>
+    <!-- Load BodyPix -->
+    <script src="js/body-pix.min.js"></script>
+</head>
+
+<body>
+    <header id="header" class="page-header">
+        <!-- 头部显示 -->
+        <div class="container upload ">
+            <div class="row">
+                <!-- 拖拽图片到这来 -->
+                <div class="col-md-5 col-md-offset-1 up-content  dragFile">
+                    <p style="margin-top:10px;">拖拽图片到这里吧</p>
+                    <div class="up-area">
+                        <input type="file" style="display:none;" id="fileDrag" name="fileDragselect">
+                    </div>
+                </div>
+                <!-- 点击按钮上传文件 -->
+                <div class="col-md-5 col-md-offset-1 up-content btnFile">
+                    <div class="btn">
+                        <button type="button" class="btn btn-success" id="btn">本地上传文件</button>
+                        <input type="file" accept="image/*" style="display:none;" id="fileInput" name="fileselect">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="output">
+    </div>
+    <div id="accu">
+    </div>
+    <canvas id="canvas"></canvas>
+</body>
+
+<script type="text/javascript">
+    //点击本地上传文件
+    $('#btn').click(() => {
+        $('#fileInput').click();
+    })
+    $('#fileInput').change((event) => {
+        var file = event.target.files;
+        appendFile(file, '.output');
+    })
+
+    //拖拽上传文件 在页面进行预览 上传form用到ajax
+    const dragbox = document.querySelector('.dragFile');
+    dragbox.addEventListener('dragover', function (e) {
+        e.preventDefault(); // 必须阻止默认事件
+    }, false);
+    dragbox.addEventListener('drop', function (e) {
+        e.preventDefault(); // 阻止默认事件
+        var file = e.dataTransfer.files; //获取文件
+        appendFile(file, '.output')
+        // code
+    }, false);
+    function appendFile(files, listName) {
+        for (file of files) {
+            let url = window.URL.createObjectURL(file);
+            let liStr = `
+                          <div>
+                    <img src="${url}" alt="文件" id="images" />
+                </div>
+                      `;
+            $(listName).empty();
+            $(listName).append(liStr);
+            //$(listName).add(liStr);
+        }
+        showNext("images");
+    }
+    function showNext(name) {
+        const img = document.getElementById(name);
+
+        async function loadAndPredict() {
+            const net = await bodyPix.load(/** optional arguments, see below **/);
+
+            /**
+             * One of (see documentation below):
+             *   - net.segmentPerson
+             *   - net.segmentPersonParts
+             *   - net.segmentMultiPerson
+             *   - net.segmentMultiPersonParts
+             * See documentation below for details on each method.
+             */
+            const partSegmentation = await net.segmentMultiPersonParts(img);
+            console.log(partSegmentation[0].pose.score);
+
+            // The colored part image is an rgb image with a corresponding color from the
+            // rainbow colors for each part at each pixel, and black pixels where there is
+            // no part.
+            const coloredPartImage = bodyPix.toColoredPartMask(partSegmentation);
+            const opacity = 1;
+            const flipHorizontal = false;
+            const maskBlurAmount = 0;
+            const canvas = document.getElementById('canvas');
+            // Draw the colored part image on top of the original image onto a canvas.
+            // The colored part image will be drawn semi-transparent, with an opacity of
+            // 0.7, allowing for the original image to be visible under.
+            bodyPix.drawMask(
+                canvas, img, coloredPartImage, opacity, maskBlurAmount,
+                flipHorizontal);
+            var sum = 0;
+            for (var i = 0; i < partSegmentation.length; i++) {
+                sum += partSegmentation[i].pose.score; //don't forget to add the base
+            }
+            var avg = sum / partSegmentation.length;
+            document.getElementById("accu").textContent = "";
+            document.getElementById("accu").appendChild(document.createTextNode("总共" + partSegmentation.length + "通道, " + "采样平均得分"
+                + avg));
+        }
+        loadAndPredict();
+    }
+</script>
+
+</html>
