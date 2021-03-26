@@ -1,8 +1,14 @@
-# ¾ßÌåÄÚÈİ
+# å…·ä½“å†…å®¹
 
-±¾¹¤³ÌÊÇ»ùÓÚbody-pixµÄÈËÎï·Ö¸îÄ£ĞÍÉú³ÉÓïÒå·Ö¸îÍ¼¡£²»º¬npmµÄÇ°¶Ë¹¤³Ì¡£
+æœ¬å·¥ç¨‹æ˜¯åŸºäºbody-pixçš„äººç‰©åˆ†å‰²æ¨¡å‹ç”Ÿæˆè¯­ä¹‰åˆ†å‰²å›¾ã€‚ä¸å«npmçš„å‰ç«¯å·¥ç¨‹ã€‚
 
-# ¸ÅÒªÉè¼Æ
+# æ¦‚è¦è®¾è®¡
 
-¼¯³ÉÁËbody-pixÊµÏÖÓïÒå·Ö¸îÍ¼µÄ¹¦ÄÜ£¬²¢Ê¹ÓÃinputºÍbuttonÊµÏÖÁËÍÏ×§Í¼Æ¬ºÍÉÏ´«Í¼Æ¬¡£
-JavaScriptÒÀÀµ¿â£ºbootstrap, jquery, tensorflow/tfjs, tensorflow-models/body-pix.
+é›†æˆäº†body-pixå®ç°è¯­ä¹‰åˆ†å‰²å›¾çš„åŠŸèƒ½ï¼Œå¹¶ä½¿ç”¨inputå’Œbuttonå®ç°äº†æ‹–æ‹½å›¾ç‰‡å’Œä¸Šä¼ å›¾ç‰‡ã€‚
+JavaScriptä¾èµ–åº“ï¼šbootstrap, jquery, tensorflow/tfjs, tensorflow-models/body-pix.
+
+# ç¤ºä¾‹
+
+![image](https://user-images.githubusercontent.com/53852392/112630261-492b7c00-8e70-11eb-9b07-0237140d8db9.png)
+
+![image](https://user-images.githubusercontent.com/53852392/112630277-4d579980-8e70-11eb-9c28-b69e7d5b080f.png)
